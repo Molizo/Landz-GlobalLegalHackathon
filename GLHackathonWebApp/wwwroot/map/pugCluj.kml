@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<GroundOverlay>
+	<name>PUG Cluj-Napoca 2018</name>
+	<open>1</open>
+	<color>9effffff</color>
+	<Icon>
+		<href>pugCluj.png</href>
+		<viewBoundScale>0.75</viewBoundScale>
+	</Icon>
+	<LatLonBox>
+		<north>46.87771910412037</north>
+		<south>46.68592188189814</south>
+		<east>23.72268889313926</east>
+		<west>23.49244466674479</west>
+		<rotation>0.9800000190734863</rotation>
+	</LatLonBox>
+</GroundOverlay>
+</kml>

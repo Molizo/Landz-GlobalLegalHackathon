@@ -1,0 +1,411 @@
+﻿@page
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Home";
+}
+<div id='map' style='width: 100%; height: 900px;'></div>
+
+<div class="absolute pin-t pin-r w-1/5 mt-4 mr-4" style="position: absolute; top: 75px; right: 20px;">
+    <input type="search" id="address-input" placeholder="Search for a city" />
+</div>
+
+<div id="info-card" class="absolute pin-t pin-l mt-4 ml-4 rounded shadow-lg bg-white" style="max-width: 400px; display: none; position: absolute; top: 75px;">
+    <div class="overflow-hidden" style="height:200px;">
+        <span class="absolute pin-t pin-r px-4 py-3">
+            <i id="info-card-close-button" class="fa fa-times" role="button" aria-hidden="true"></i>
+        </span>
+        <img id="property-image" src="http://via.placeholder.com/400x200?text=Loading..." />
+    </div>
+    <div class="px-6 py-4">
+        <div id="property-name" class="font-bold text-2">Airport Name goes here</div>
+
+        <div id="more-info" class="mt-8">
+            <div class="flex mb-4">
+                <div class="w-10"><i class="fa fa-map-marker" aria-hidden="true"></i></div>
+                <div id="property-address" class="font-medium text-l mb-2 w-full"></div>
+            </div>
+            <div class="row">
+                <div class="flex mb-4 col-6">
+                    <div class="w-10"><i class="fa fa-phone" aria-hidden="true"></i></div>
+                    <div id="property-phone" class="font-medium text-l mb-2 w-full"></div>
+                </div>
+
+                <div class="flex mb-4 col-6">
+                    <div class="w-10"><i class="fa fa-link" aria-hidden="true"></i></div>
+                    <div id="property-website" class="font-medium text-l mb-2 w-full"></div>
+                </div>
+            </div>
+            <div id="propertyHistory" style="display: none;">
+                <div class="row">
+                    <div class="flex col-12">
+                        <div class="font-bold text-l mb-2 w-full">Property History</div>
+                    </div>
+                    <!-- timeline item 1 left dot -->
+                    <div class="col-auto text-center flex-column d-none d-sm-flex">
+                        <div class="row h-50">
+                            <div class="col">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                        </div>
+                        <h5 class="m-2">
+                            <span class="badge badge-pill bg-success">&nbsp;</span>
+                        </h5>
+                        <div class="row h-50">
+                            <div class="col border-right">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                        </div>
+                    </div>
+                    <!-- timeline item 1 event content -->
+                    <div class="col px-3 p-2">
+                        <div class="card border-success shadow">
+                            <div class="card-body">
+                                <div class="float-right text-success">01/19 - 01/20</div>
+                                <h4 class="card-title text-success">Alpha Estate SRL</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/row-->
+                <!-- timeline item 2 -->
+                <div class="row">
+                    <div class="col-auto text-center flex-column d-none d-sm-flex">
+                        <div class="row h-50">
+                            <div class="col border-right">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                        </div>
+                        <h5 class="m-2">
+                            <span class="badge badge-pill bg-light border">&nbsp;</span>
+                        </h5>
+                        <div class="row h-50">
+                            <div class="col border-right">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                        </div>
+                    </div>
+                    <div class="col px-3 p-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="float-right text-muted">11/03 - 01/19</div>
+                                <h4 class="card-title text-muted">Delta Property SA</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/row-->
+                <!-- timeline item 3 -->
+                <div class="row">
+                    <div class="col-auto text-center flex-column d-none d-sm-flex">
+                        <div class="row h-50">
+                            <div class="col border-right">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                        </div>
+                        <h5 class="m-2">
+                            <span class="badge badge-pill bg-light border">&nbsp;</span>
+                        </h5>
+                    </div>
+                    <div class="col px-3 p-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="float-right text-muted">12/02 - 11/03</div>
+                                <h4 class="card-title">Unavailable - PF</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--/row-->
+                </div>
+            </div>
+            <h2 id="id"></h2>
+            <button type="button" class="btn btn-info btn-lg rounded-0 mt-2" data-toggle="modal" data-target="#technicalModal">Technical Details</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="technicalModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Technical Details</h2>
+            </div>
+            <div class="modal-body h-50">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="flex mb-4">
+                            <div class="w-10"></div>
+                            <div class="font-bold text-l mb-2 w-full">Useful Surface</div>
+                            <div id="technical-usefulSurface" class="font-medium text-l mb-2 w-full"></div>
+                        </div>
+                        <div class="flex mb-4">
+                            <div class="w-10"></div>
+                            <div class="font-bold text-l mb-2 w-full">Built Surface</div>
+                            <div id="technical-builtSurface" class="font-medium text-l mb-2 w-full"></div>
+                        </div>
+                        <div class="flex mb-4">
+                            <div class="w-10"></div>
+                            <div class="font-bold text-l mb-2 w-full">Building Access - Footpath</div>
+                            <div id="technical-buildingAccessFootpath" class="font-medium text-l mb-2 w-full"></div>
+                        </div>
+                        <div class="flex mb-4">
+                            <div class="w-10"></div>
+                            <div class="font-bold text-l mb-2 w-full">Building Access - Automobile</div>
+                            <div id="technical-buildingAccessAutomobiles" class="font-medium text-l mb-2 w-full"></div>
+                        </div>
+                        <div class="flex mb-4">
+                            <div class="w-10"></div>
+                            <div class="font-bold text-l mb-2 w-full">Building Structure</div>
+                            <div id="technical-buildingStructure" class="font-medium text-l mb-2 w-full"></div>
+                        </div>
+                        <div class="flex mb-4">
+                            <div class="w-10"></div>
+                            <div class="font-bold text-l mb-2 w-full">Communal Spaces</div>
+                            <div id="technical-communalSpaces" class="font-medium text-l mb-2 w-full"></div>
+                        </div>
+                        <div class="flex mb-4">
+                            <div class="w-10"></div>
+                            <div class="font-bold text-l mb-2 w-full">External Surface</div>
+                            <div id="technical-externalSpaces" class="font-medium text-l mb-2 w-full"></div>
+                        </div>
+                        <div class="flex mb-4">
+                            <div class="w-10"></div>
+                            <div class="font-bold text-l mb-2 w-full">Distance from perimeters</div>
+                            <div id="technical-buildingPadding" class="font-medium text-l mb-2 w-full"></div>
+                        </div>
+                        <div class="flex mb-4">
+                            <div class="w-10"></div>
+                            <div class="font-bold text-l mb-2 w-full">Max height</div>
+                            <div id="technical-maxHeight" class="font-medium text-l mb-2 w-full"></div>
+                        </div>
+                        <div class="flex mb-4">
+                            <div class="w-10"></div>
+                            <div class="font-bold text-l mb-2 w-full">Utilities</div>
+                            <div id="technical-utilities" class="font-medium text-l mb-2 w-full"></div>
+                        </div>
+                    </div>
+                    <div class="col-6"><h2 class="pb-3">Building structure</h2><div id="mansarda" style="background-color:brown; height:0px; border-width:2px; border-color:black; overflow: hidden;"><h2 style="color:white; font-size:1.75em;padding:7px;">Top floor</h2></div><div id="etaj" style="background-color:red; height:0px; border-width:2px; border-color:black; overflow: hidden;"><h2 style="color:white; font-size:1.75em;padding:7px;">Floors</h2></div><div id="parter" style="background-color:green; height:50px; border-width:2px; border-color:black; overflow: hidden;"><h2 style="color:white; font-size:1.75em;padding:7px;">Ground floor</h2></div><div id="demisol" style="background-color:blue; height:0px; border-width:2px; border-color:black; overflow: hidden;"><h2 style="color:white; font-size:1.75em;padding:7px;"></h2></div><div id="subsol" style="background-color:purple; height:0px; border-width:2px; border-color:black; overflow: hidden;"><h2 style="color:white; font-size:1.75em;padding:7px;">Underground floors</h2></div></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    mapboxgl.accessToken = '@Model.MapboxAccessToken';
+    var map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'mapbox://styles/mapbox/light-v10', // stylesheet location
+        center: [@Model.InitialLongitude, @Model.InitialLatitude], // starting position [lng, lat]
+        zoom: @Model.InitialZoom
+    });
+
+    var nav = new mapboxgl.NavigationControl();
+    map.addControl(nav, 'bottom-right');
+
+    var placesAutocomplete = places({
+        container: document.querySelector('#address-input'),
+        type: 'city'
+    });
+
+    placesAutocomplete.on('change', e => {
+        map.flyTo({
+            center: [ e.suggestion.latlng.lng, e.suggestion.latlng.lat],
+            zoom: 9
+        });
+    });
+
+    const metersToPixelsAtMaxZoom = (meters, latitude) =>
+        meters / 0.075 / Math.cos(latitude * Math.PI / 180);
+
+    map.on('load',
+        () => {
+
+            map.addSource("properties",
+                {
+                    type: "geojson",
+                    data: "?handler=plots",
+                    cluster: true, // Enable clustering
+                    clusterRadius: 50, // Radius of each cluster when clustering points
+                    clusterMaxZoom: 6 // Max zoom to cluster points on
+                });
+
+            map.addSource("noFly",
+                {
+                    type: "geojson",
+                    data: "map/noFlyGeoJson.txt",
+                    cluster: true, // Enable clustering
+                    clusterRadius: 50, // Radius of each cluster when clustering points
+                    clusterMaxZoom: 6
+                });
+
+            map.addLayer({
+                id: 'noFLyLayer',
+                type: 'circle',
+                source: 'noFly',
+                paint: {
+                    'circle-opacity':0.25,
+                    'circle-color': '#F87008' ,
+                    'circle-radius': {
+                        stops: [
+                            [0, 0],
+                            [20, metersToPixelsAtMaxZoom(3000, 44)]
+                        ],
+                        base: 2
+                    },
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': '#fff'
+                }
+            });
+
+            map.addLayer({
+                id: 'warningPlots',
+                type: 'circle',
+                source: 'properties',
+                filter: ["==", 'technicalBuiltSurface', 'Warning'],
+                paint: {
+                    'circle-color': '#F8E808' ,
+                    'circle-radius': 6,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': '#fff'
+                }
+            });
+
+            map.addLayer({
+                id: 'plots',
+                type: 'circle',
+                source: 'properties',
+
+                filter: ["all",["!=", 'technicalBuiltSurface', '0'],["!=", 'technicalBuiltSurface', 'Warning']],//filter: ['!has', 'point_count'],
+                paint: {
+                    'circle-color': '#1EF008',
+                    'circle-radius': 6,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': '#fff'
+                }
+            });
+
+            map.addLayer({
+                id: 'occupiedPlots',
+                type: 'circle',
+                source: 'properties',
+                filter: ["==", 'technicalBuiltSurface', '0'],
+                paint: {
+                    'circle-color': '#F80808',
+                    'circle-radius': 6,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': '#fff'
+                }
+            });
+
+            map.addLayer({
+                id: 'clusters',
+                type: 'circle',
+                source: 'properties',
+                filter: ['has', 'point_count'],
+                paint: {
+                    'circle-color': {
+                        property: 'point_count',
+                        type: 'interval',
+                        stops: [
+                            [0, '#41A337'],
+                            [100, '#2D7026'],
+                            [750, '#0B5703'],
+                        ]
+                    },
+                    'circle-radius': {
+                        property: 'point_count',
+                        type: 'interval',
+                        stops: [
+                            [0, 20],
+                            [100, 30],
+                            [750, 40]
+                        ]
+                    }
+                }
+            });
+
+            var popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: true
+            });
+
+            map.on('mouseenter',
+                'plots',
+                function(e) {
+                    // Change the cursor style as a UI indicator.
+                    map.getCanvas().style.cursor = 'pointer';
+
+                    // Populate the popup and set its coordinates
+                    // based on the feature found.
+                    popup.setLngLat(e.features[0].geometry.coordinates)
+                        .setHTML(e.features[0].properties.name)
+                        .addTo(map);
+                });
+
+            map.on('mouseleave',
+                'plots',
+                function() {
+                    map.getCanvas().style.cursor = '';
+                    popup.remove();
+                });
+
+            map.on('click', 'plots', e => {
+                var lat = e.features[0].geometry.coordinates[1];
+                var lng = e.features[0].geometry.coordinates[0];
+
+                // Display property info
+                document.querySelector('#id').innerText = "ID "+e.features[0].properties.id;
+                document.querySelector('#property-name').innerText = e.features[0].properties.name;
+                document.querySelector('#property-image').src = 'http://via.placeholder.com/400x200?text=Loading...';
+                document.querySelector('#technical-usefulSurface').innerText = e.features[0].properties.technicalUsefulSurface+"m^2";
+                document.querySelector('#technical-builtSurface').innerText = e.features[0].properties.technicalBuiltSurface+"m^2";
+                document.querySelector('#technical-buildingAccessFootpath').innerText = e.features[0].properties.technicalBuildingAccessFootpath;
+                document.querySelector('#technical-buildingAccessAutomobiles').innerText = e.features[0].properties.technicalBuildingAccessAutomobiles;
+                document.querySelector('#technical-buildingStructure').innerText = e.features[0].properties.technicalBuildingStructure;
+                document.querySelector('#technical-communalSpaces').innerText = e.features[0].properties.technicalCommunalSpaces;
+                document.querySelector('#technical-externalSpaces').innerText = e.features[0].properties.technicalExternalSpaces;
+                document.querySelector('#technical-buildingPadding').innerText = e.features[0].properties.technicalBuildingPadding+"m";
+                document.querySelector('#technical-maxHeight').innerText = e.features[0].properties.technicalMaxHeight+"m";
+                document.querySelector('#technical-utilities').innerText = e.features[0].properties.technicalUtilities;
+                document.querySelector('#mansarda').style.height = e.features[0].properties.mansarda*5+"px";
+                document.querySelector('#etaj').style.height = e.features[0].properties.etaj*5+"px";
+                document.querySelector('#demisol').style.height = e.features[0].properties.demisol*5+"px";
+                document.querySelector('#subsol').style.height = e.features[0].properties.subsol*5+"px";
+
+                // Hide more info at first
+                document.querySelector('#more-info').style.display = 'none';
+
+                // Ensure the info box is visible
+                document.querySelector('#info-card').style.display = '';
+
+                if (e.features[0].properties.name != 'Not available')
+                    document.querySelector('#propertyHistory').style.display = '';
+                else
+                    document.querySelector('#propertyHistory').style.display = 'none';
+
+                fetch(`/?handler=plotdetails&name=${name}&latitude=${lat}&longitude=${lng}`)
+                    .then(blob => blob.json())
+                    .then(data => {
+                        // Set airport properties
+                        if (data.photo)
+                            document.querySelector('#property-image').src = 'data:image/png;base64,' + data.photo;
+                        else
+                            document.querySelector('#property-image').src =
+                                'http://via.placeholder.com/400x200?text=No+Image+Found';
+                        document.querySelector('#property-address').innerText = data.formattedAddress || 'Not available';
+                        document.querySelector('#property-phone').innerText = data.phoneNumber || 'Not available';
+                        document.querySelector('#property-website').innerText = data.website || 'Not available';
+
+                        // display more info
+                        document.querySelector('#more-info').style.display = '';
+                    })
+                    .catch(error => {
+                        document.querySelector('#property-image').src = 'http://via.placeholder.com/400x200?text=Error+while+loading+data';
+                    });
+            });
+        });
+    document.querySelector('#info-card-close-button').addEventListener('click', function(event) {
+        document.querySelector('#info-card').style.display = 'none';
+    });
+</script>
